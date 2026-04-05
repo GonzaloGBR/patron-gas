@@ -24,7 +24,7 @@ export default async function SalesPage() {
         </div>
         <Link
           href="/sales/new"
-          className="inline-flex items-center justify-center rounded-xl bg-[#ff7a1a] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_10px_35px_rgba(248,115,22,0.55)] hover:bg-[#ff6500]"
+          className="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_10px_35px_rgba(42,80,120,0.4)] hover:bg-brand-500"
         >
           + Nueva venta
         </Link>
@@ -103,7 +103,7 @@ export default async function SalesPage() {
                     {sale.status === "PENDIENTE" && (
                       <Link
                         href={`/sales/${sale.id}/complete`}
-                        className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#ff7a1a] underline decoration-1 underline-offset-4 hover:text-[#ff6500]"
+                        className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-700 underline decoration-1 underline-offset-4 hover:text-brand-600"
                       >
                         Completar
                       </Link>

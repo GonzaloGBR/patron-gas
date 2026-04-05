@@ -159,7 +159,7 @@ export default async function DashboardPage() {
         </div>
         <Link
           href="/sales/new"
-          className="inline-flex items-center justify-center rounded-xl bg-[#ff7a1a] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_12px_40px_rgba(248,115,22,0.65)] transition-transform transition-colors hover:bg-[#ff6500] hover:shadow-[0_18px_55px_rgba(248,115,22,0.75)]"
+          className="inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_12px_40px_rgba(42,80,120,0.45)] transition-transform transition-colors hover:bg-brand-500 hover:shadow-[0_18px_50px_rgba(61,110,168,0.5)]"
         >
           + Registrar venta
         </Link>
@@ -222,20 +222,20 @@ export default async function DashboardPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <article className="relative overflow-hidden rounded-2xl border border-orange-500/40 bg-orange-500/5 px-5 py-4">
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-orange-500/10 to-transparent" />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-orange-700">
+        <article className="relative overflow-hidden rounded-2xl border border-brand-500/35 bg-brand-50/80 px-5 py-4">
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-brand-200/40 to-transparent" />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
             Pedidos pendientes
           </p>
           <div className="mt-3 flex items-baseline gap-3">
             <span className="font-mono text-3xl font-semibold text-slate-900 tabular-nums">
               {pendingOrders}
             </span>
-            <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-900">
+            <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-900">
               En cola
             </span>
           </div>
-          <p className="mt-1 text-xs text-orange-800/80">
+          <p className="mt-1 text-xs text-brand-800/85">
             Pedidos aún no completados. Priorizá estos clientes.
           </p>
         </article>

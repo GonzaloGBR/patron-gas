@@ -1,5 +1,6 @@
 "use client"
 
+import BrandLogo from "@/components/BrandLogo"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -20,24 +21,25 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur">
+    <nav className="sticky top-0 z-40 border-b border-brand-800/60 bg-gradient-to-b from-brand-950/98 to-brand-900/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex h-14 sm:h-16 items-center justify-between gap-3">
-          <div className="flex items-center gap-4 min-w-0">
-            <div className="hidden sm:flex h-9 w-9 items-center justify-center rounded-md bg-gradient-to-br from-[#ff7a1a] to-[#ff4b1f] shadow-sm">
-              <span className="text-[10px] font-black tracking-[0.22em] text-slate-950">
-                GAS
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-200">
+          <div className="flex items-center gap-3 min-w-0 sm:gap-4">
+            <Link
+              href="/"
+              className="shrink-0 rounded-full bg-black/35 p-0.5 ring-1 ring-brand-700/45 transition-opacity hover:opacity-90"
+            >
+              <BrandLogo variant="sm" className="sm:h-10 sm:w-10" />
+            </Link>
+            <div className="hidden min-[380px]:flex flex-col min-w-0">
+              <span className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-100">
                 Patrón del Gas
               </span>
-              <span className="text-[11px] text-slate-400">
-                Panel de administración diaria
+              <span className="text-[11px] text-brand-400/85 truncate">
+                Zona Sudeste
               </span>
             </div>
-            <div className="hidden md:flex items-center gap-1 ml-4 rounded-full border border-slate-700/80 bg-slate-900/80 px-1.5 py-1">
+            <div className="hidden md:flex items-center gap-1 ml-2 rounded-full border border-brand-700/55 bg-brand-950/50 px-1.5 py-1">
               {navItems.map((item) => {
                 const active =
                   pathname === item.href ||
@@ -48,8 +50,8 @@ export default function Navbar() {
                     href={item.href}
                     className={`relative inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors ${
                       active
-                        ? "bg-slate-100 text-slate-900"
-                        : "text-slate-300 hover:text-white hover:bg-slate-800/80"
+                        ? "bg-brand-100 text-brand-950"
+                        : "text-slate-300 hover:text-white hover:bg-brand-800/80"
                     }`}
                   >
                     {item.name}
@@ -61,14 +63,14 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             {session && (
-              <span className="hidden sm:inline-flex max-w-xs items-center truncate rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-300 ring-1 ring-slate-700/80">
+              <span className="hidden sm:inline-flex max-w-xs items-center truncate rounded-full bg-brand-950/70 px-3 py-1 text-[11px] font-medium text-slate-300 ring-1 ring-brand-700/60">
                 <span className="mr-2 h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="truncate">{session.user?.email}</span>
               </span>
             )}
             <button
               onClick={() => signOut()}
-              className="inline-flex items-center gap-1 rounded-full border border-[#ff7a1a] bg-[#ff7a1a]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#ffddb8] hover:bg-[#ff7a1a]/25 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1 rounded-full border border-brand-500/70 bg-brand-600/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-100 hover:bg-brand-500/30 hover:text-white transition-colors"
             >
               <span className="hidden sm:inline">Cerrar sesión</span>
               <span className="sm:hidden">Salir</span>
@@ -86,8 +88,8 @@ export default function Navbar() {
                 href={item.href}
                 className={`whitespace-nowrap rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${
                   active
-                    ? "bg-slate-100 text-slate-900"
-                    : "bg-slate-900/80 text-slate-300 hover:text-white"
+                    ? "bg-brand-100 text-brand-950"
+                    : "bg-brand-950/70 text-slate-300 hover:text-white"
                 }`}
               >
                 {item.name}

@@ -41,7 +41,7 @@ export default function DashboardCharts({ lineChart, pieChart, stockChart }: Das
       symbolSize: 8,
       areaStyle: { opacity: 0.1 }
     })),
-    color: ['#1b3b50', '#ff7a1a', '#10b981', '#3b82f6', '#8b5cf6']
+    color: ['#142a42', '#3d6ea8', '#10b981', '#5c8cc4', '#64748b']
   }
 
   // -- Opciones Gráfico 2: Ganancias por Tipo de Cliente (Pie)
@@ -59,7 +59,7 @@ export default function DashboardCharts({ lineChart, pieChart, stockChart }: Das
         data: pieChart.data
       }
     ],
-    color: ['#10b981', '#1b3b50', '#ff7a1a', '#f59e0b']
+    color: ['#10b981', '#142a42', '#3d6ea8', '#94a3b8']
   }
 
   // -- Opciones Gráfico 3: Estado físico de envases (Barras)
@@ -90,7 +90,7 @@ export default function DashboardCharts({ lineChart, pieChart, stockChart }: Das
         itemStyle: { borderRadius: [4, 4, 0, 0] }
       }
     ],
-    color: ['#10b981', '#cbd5e1']
+    color: ['#10b981', '#3d6ea8']
   }
 
   return (

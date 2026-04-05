@@ -1,13 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f6fa;
-  --foreground: #0f172a;
+  --background: #eef3f9;
+  --foreground: #0c1929;
+  /* Azul elegante alineado al logo (garrafa / anillo) */
+  --brand-950: #060d16;
+  --brand-900: #0c1d2e;
+  --brand-800: #142a42;
+  --brand-700: #1c3a56;
+  --brand-600: #2a5078;
+  --brand-500: #3d6ea8;
+  --brand-400: #5c8cc4;
+  --brand-200: #b8d0ea;
+  --brand-100: #d8e6f5;
+  --brand-50: #edf4fb;
+  --brand-ring: #2d4d6e;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-950: var(--brand-950);
+  --color-brand-900: var(--brand-900);
+  --color-brand-800: var(--brand-800);
+  --color-brand-700: var(--brand-700);
+  --color-brand-600: var(--brand-600);
+  --color-brand-500: var(--brand-500);
+  --color-brand-400: var(--brand-400);
+  --color-brand-200: var(--brand-200);
+  --color-brand-100: var(--brand-100);
+  --color-brand-50: var(--brand-50);
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
   --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
@@ -16,13 +38,23 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #020617;
-    --foreground: #e5e7eb;
+    --background: #060d16;
+    --foreground: #e8eef5;
   }
 }
 
 body {
-  background: radial-gradient(circle at top left, #0f172a 0, #020617 24%, #f4f6fa 24%),
+  background:
+    radial-gradient(
+      ellipse 120% 80% at 0% -20%,
+      var(--brand-800) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 60% at 100% 0%,
+      color-mix(in srgb, var(--brand-600) 35%, transparent) 0%,
+      transparent 50%
+    ),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
