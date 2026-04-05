@@ -3,9 +3,13 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { compare } from "bcrypt"
 import prisma from "@/lib/prisma"
 
+// NextAuth exige un secret en NODE_ENV=production. Si falta, muestra exactamente
+// "There is a problem with the server configuration" (no es un fallo de Prisma/MySQL).
+const authSecret =
+  process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || undefined
+
 const handler = NextAuth({
-  // En producción (Hostinger, Vercel, etc.) sin esto NextAuth muestra "Server configuration error".
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: authSecret,
   providers: [
     CredentialsProvider({
       name: "Credentials",
