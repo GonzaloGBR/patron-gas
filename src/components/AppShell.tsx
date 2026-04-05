@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar"
 
-/** Solo envuelve las rutas del panel (grupo `(main)`). `/login` no usa este layout. */
+/** Solo envuelve las rutas del panel (grupo `(main)`). El login vive en `/acceso`. */
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">

@@ -40,7 +40,7 @@ Todo queda registrado con fechas para consultar después.
 ## 2. Cómo entrar
 
 1. Abrís la dirección del sitio (por ejemplo la que te dio Hostinger).
-2. Vas a la pantalla de **Iniciar sesión**.
+2. Vas a la pantalla de **Iniciar sesión** (la dirección suele terminar en `/acceso`; si entrás por un enlace antiguo a `/login`, el sistema te redirige igual).
 3. Ingresás **email** y **contraseña** que te asignaron (el administrador los crea en la base de datos con scripts o soporte técnico).
 
 Si el email o la contraseña no coinciden, verás un mensaje de error y no entrás al panel.

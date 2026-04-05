@@ -10,7 +10,7 @@ export default withAuth(
       authorized: ({ token }) => !!token
     },
     pages: {
-      signIn: "/login",
+      signIn: "/acceso",
     }
   }
 )
@@ -19,12 +19,12 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - login (login page)
+     * - login (redirige a /acceso), acceso
      * - api/auth (NextAuth API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!login|api/auth|_next/static|_next/image|favicon.ico).*)",
+    "/((?!login|acceso|api/auth|_next/static|_next/image|favicon.ico).*)",
   ],
 }
