@@ -1,6 +1,9 @@
 import { getClients, deleteClient } from "@/actions/clients"
 import Link from "next/link"
 
+/** Evita pre-render en build (Hostinger/CI sin DATABASE_URL). */
+export const dynamic = "force-dynamic"
+
 export default async function ClientsPage() {
   const clients = await getClients()
 

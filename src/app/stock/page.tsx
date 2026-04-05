@@ -1,6 +1,8 @@
 import { getProductsForStock } from "@/actions/stock"
 import StockTableEditor from "./StockTableEditor"
 
+export const dynamic = "force-dynamic"
+
 export default async function StockPage() {
   const productsStock = await getProductsForStock()
 

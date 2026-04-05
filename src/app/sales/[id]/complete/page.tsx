@@ -2,6 +2,8 @@ import { getOrder } from "@/actions/sales"
 import { notFound } from "next/navigation"
 import CompleteOrderForm from "./CompleteOrderForm"
 
+export const dynamic = "force-dynamic"
+
 export default async function CompleteOrderPage({ params }: { params: { id: string } }) {
   const parsedParams = await params
   const order = await getOrder(Number(parsedParams.id))

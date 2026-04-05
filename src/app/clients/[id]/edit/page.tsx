@@ -2,6 +2,8 @@ import ClientForm from "@/components/ClientForm"
 import { getClient } from "@/actions/clients"
 import { notFound } from "next/navigation"
 
+export const dynamic = "force-dynamic"
+
 export default async function EditClientPage({ params }: { params: { id: string } }) {
   const parsedParams = await params // Next.js 15 requires awaiting dynamic params
   const client = await getClient(Number(parsedParams.id))

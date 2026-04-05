@@ -4,6 +4,8 @@ import { compare } from "bcrypt"
 import prisma from "@/lib/prisma"
 
 const handler = NextAuth({
+  // En producción (Hostinger, Vercel, etc.) sin esto NextAuth muestra "Server configuration error".
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "Credentials",

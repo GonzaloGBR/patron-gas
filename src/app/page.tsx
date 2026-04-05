@@ -4,6 +4,9 @@ import { format, startOfMonth, startOfWeek } from "date-fns"
 import { es } from "date-fns/locale"
 import DashboardCharts from "@/components/charts/DashboardCharts"
 
+/** Evita pre-render en build sin conexión a la base de datos. */
+export const dynamic = "force-dynamic"
+
 export default async function DashboardPage() {
   const fifteenDaysAgo = new Date();
   fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);

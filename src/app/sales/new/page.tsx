@@ -1,6 +1,8 @@
 import { getCreateSaleData } from "@/actions/sales"
 import SaleForm from "./SaleForm"
 
+export const dynamic = "force-dynamic"
+
 export default async function NewSalePage() {
   const { clients, products } = await getCreateSaleData()
 

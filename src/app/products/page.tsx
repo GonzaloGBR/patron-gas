@@ -1,6 +1,8 @@
 import { getProductsWithPrices } from "@/actions/products"
 import ProductsClientPage from "./ProductsClientPage"
 
+export const dynamic = "force-dynamic"
+
 export default async function ProductsServerPage() {
   const products = await getProductsWithPrices()
   

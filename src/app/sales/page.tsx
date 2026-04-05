@@ -3,6 +3,8 @@ import Link from "next/link"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 
+export const dynamic = "force-dynamic"
+
 export default async function SalesPage() {
   const sales = await getSales()
 
