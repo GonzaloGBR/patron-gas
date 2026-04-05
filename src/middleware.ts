@@ -1,30 +1,39 @@
 import { withAuth } from "next-auth/middleware"
+import type { NextRequestWithAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
+import type { NextFetchEvent, NextRequest } from "next/server"
 
-export default withAuth(
-  function middleware(req) {
+const NO_STORE =
+  "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+
+const protectedMiddleware = withAuth(
+  function middleware() {
     return NextResponse.next()
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token
+      authorized: ({ token }) => !!token,
     },
     pages: {
       signIn: "/acceso",
-    }
+    },
   }
 )
 
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
+  const p = req.nextUrl.pathname
+  if (p === "/api/health") {
+    return NextResponse.next()
+  }
+  if (p === "/acceso" || p === "/login") {
+    const res = NextResponse.next()
+    res.headers.set("Cache-Control", NO_STORE)
+    return res
+  }
+  return protectedMiddleware(req as NextRequestWithAuth, event)
+}
+
+/** Solo excluye `api/auth`; el resto de `/api/*` sigue protegido por sesión. */
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - login (redirige a /acceso), acceso
-     * - api/auth (NextAuth API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!login|acceso|api/auth|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
 }
