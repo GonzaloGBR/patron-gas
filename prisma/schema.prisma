@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ClientType {
+  DOMICILIO
+  ESTABLECIMIENTO
+  MAYORISTA
+}
+
+enum Brand {
+  HIPERGAS
+  VARIGAS
+  YPF
+}
+
+enum OrderStatus {
+  PENDIENTE
+  COMPLETADO
+  CANCELADO
+}
+
+enum PaymentMethod {
+  EFECTIVO
+  TRANSFERENCIA
+}
+
+enum MovementType {
+  INGRESO_PROVEEDOR
+  ENVIO_PROVEEDOR
+  VENTA
+  DEVOLUCION_CLIENTE
+  PRESTAMO_CLIENTE
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password_hash String
+  name          String
+  created_at    DateTime @default(now())
+
+  @@map("users")
+}
+
+model Client {
+  id          Int        @id @default(autoincrement())
+  first_name  String
+  last_name   String
+  phone       String?
+  address     String?
+  client_type ClientType
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  is_active   Boolean    @default(true)
+
+  loans       ClientCylinderLoan[]
+  orders      Order[]
+
+  @@map("clients")
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  brand       Brand
+  weight      Int      // 10 or 15
+  stock_full  Int      @default(0)
+  stock_empty Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  prices      Price[]
+  loans       ClientCylinderLoan[]
+  order_items OrderItem[]
+  movements   StockMovement[]
+
+  @@map("products")
+}
+
+model Price {
+  id          Int        @id @default(autoincrement())
+  product_id  Int
+  product     Product    @relation(fields: [product_id], references: [id])
+  client_type ClientType
+  price       Decimal    @db.Decimal(10, 2)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  @@map("prices")
+}
+
+model ClientCylinderLoan {
+  id            Int      @id @default(autoincrement())
+  client_id     Int
+  client        Client   @relation(fields: [client_id], references: [id])
+  product_id    Int
+  product       Product  @relation(fields: [product_id], references: [id])
+  quantity_owed Int      @default(0)
+  updated_at    DateTime @updatedAt
+
+  @@map("client_cylinder_loans")
+}
+
+model Order {
+  id             Int            @id @default(autoincrement())
+  client_id      Int
+  client         Client         @relation(fields: [client_id], references: [id])
+  status         OrderStatus    @default(PENDIENTE)
+  payment_method PaymentMethod?
+  total_amount   Decimal        @db.Decimal(10, 2) @default(0)
+  created_at     DateTime       @default(now())
+  completed_at   DateTime?
+
+  items          OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id                 Int      @id @default(autoincrement())
+  order_id           Int
+  order              Order    @relation(fields: [order_id], references: [id])
+  product_id         Int
+  product            Product  @relation(fields: [product_id], references: [id])
+  quantity           Int
+  unit_price_at_sale Decimal  @db.Decimal(10, 2)
+  subtotal           Decimal  @db.Decimal(10, 2)
+
+  @@map("order_items")
+}
+
+model StockMovement {
+  id                    Int          @id @default(autoincrement())
+  product_id            Int
+  product               Product      @relation(fields: [product_id], references: [id])
+  movement_type         MovementType
+  quantity_full_change  Int
+  quantity_empty_change Int
+  description           String?
+  created_at            DateTime     @default(now())
+
+  @@map("stock_movements")
+}
