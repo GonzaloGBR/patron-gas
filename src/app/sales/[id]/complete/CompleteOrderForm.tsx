@@ -24,14 +24,23 @@ export default function CompleteOrderForm({ order }: { order: any }) {
     )
 
     try {
-      await completePendingOrder(order.id, paymentMethod, formattedEmpties)
+      const result = await completePendingOrder(
+        order.id,
+        paymentMethod,
+        formattedEmpties
+      )
+      if (!result.ok) {
+        alert(result.error)
+        return
+      }
       router.push("/sales")
       router.refresh()
     } catch (error) {
       console.error(error)
       alert("Error completando el pedido")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
@@ -78,7 +87,10 @@ export default function CompleteOrderForm({ order }: { order: any }) {
             </div>
           )
         })}
-        <p className="text-xs text-red-600">Recuerda: Si el cliente devuelve menos vacíos que las garrafas llenas que compró, el sistema automáticamente le generará una deuda (Préstamo).</p>
+        <p className="text-xs text-slate-600">
+          Solo se suman al stock las vacías que indiques. Si alguien debe garrafas, registrá la deuda manualmente en{" "}
+          <span className="font-semibold text-slate-800">Préstamos</span>.
+        </p>
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t">

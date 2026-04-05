@@ -60,23 +60,28 @@ export default function SaleForm({ clients, products }: { clients: any[], produc
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!clientId || cart.length === 0) return alert("Selecciona un cliente y al menos 1 producto.")
-    
+
     setLoading(true)
-    
+
     try {
-      await createSale({
+      const result = await createSale({
         client_id: clientId,
         status,
         payment_method: paymentMethod,
         total_amount: totalAmount,
         items: cart,
-        empty_returned: empties
+        empty_returned: empties,
       })
+      if (!result.ok) {
+        alert(result.error)
+        return
+      }
       router.push("/sales")
       router.refresh()
     } catch (error) {
       console.error(error)
       alert("Error al procesar la venta")
+    } finally {
       setLoading(false)
     }
   }
@@ -182,8 +187,9 @@ export default function SaleForm({ clients, products }: { clients: any[], produc
                       )}
                       
                       {isActive && returnedEmpty < qty && status === "COMPLETADO" && (
-                         <div className="bg-red-50 text-red-600 text-xs font-semibold p-2.5 rounded-lg text-center border border-red-100 shadow-sm">
-                           ¡Falta entregar {qty - returnedEmpty} vacío(s)! Se anotará como deuda.
+                         <div className="rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-center text-xs font-medium text-slate-600">
+                           Quedan {qty - returnedEmpty} vacío(s) sin registrar acá. Si el cliente debe garrafas, cargalo en{" "}
+                           <span className="font-semibold text-slate-800">Préstamos</span>.
                          </div>
                       )}
                     </div>

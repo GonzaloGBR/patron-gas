@@ -2,8 +2,6 @@
 
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { MovementType } from "@prisma/client"
-
 export async function getClientLoans() {
   return await prisma.clientCylinderLoan.findMany({
     include: {
@@ -28,63 +26,6 @@ export async function getProducts() {
   return await prisma.product.findMany({
     orderBy: [{ brand: "asc" }, { weight: "asc" }]
   })
-}
-
-export async function processManualLoan(formData: FormData) {
-  const client_id = Number(formData.get("client_id"))
-  const product_id = Number(formData.get("product_id"))
-  const action_type = formData.get("action_type") as "LEND" | "RECEIVE"
-  const quantity = Number(formData.get("quantity"))
-  const description = formData.get("description") as string
-
-  if (quantity <= 0) return
-
-  await prisma.$transaction(async (tx) => {
-    // 1. Find or create loan account
-    let loanAcc = await tx.clientCylinderLoan.findFirst({
-      where: { client_id, product_id }
-    })
-
-    if (!loanAcc) {
-      loanAcc = await tx.clientCylinderLoan.create({
-        data: { client_id, product_id, quantity_owed: 0 }
-      })
-    }
-
-    // 2. Adjust quantities
-    // If we LEND to client, quantity_owed (+) increases.
-    // If we RECEIVE from client, quantity_owed (-) decreases.
-    const qtyChange = action_type === "LEND" ? quantity : -quantity
-
-    await tx.clientCylinderLoan.update({
-      where: { id: loanAcc.id },
-      data: { quantity_owed: { increment: qtyChange } }
-    })
-
-    // 3. Update stock_empty & Movements
-    // If we LEND them our empty/full, usually we loan an EMPTY when they buy a FULL without giving us one.
-    // If we are just registering a loan manually, usually it's "They took a cylinder without returning one". This means they OWE us an empty cylinder. We subtract 1 empty stock (or if it's full, technically we shouldn't mix, but typically "Cuenta Corriente" tracks empty cylinders).
-    await tx.product.update({
-      where: { id: product_id },
-      data: {
-        stock_empty: { increment: -qtyChange }
-      }
-    })
-
-    // Register movement for traceability
-    await tx.stockMovement.create({
-      data: {
-        product_id,
-        movement_type: action_type === "LEND" ? "PRESTAMO_CLIENTE" : "DEVOLUCION_CLIENTE",
-        quantity_full_change: 0,
-        quantity_empty_change: -qtyChange,
-        description: `Manual Loan Adjustment: ${description}`
-      }
-    })
-  })
-
-  revalidatePath("/loans")
-  revalidatePath("/stock")
 }
 
 export async function resolveLoan(id: number) {

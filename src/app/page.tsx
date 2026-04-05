@@ -1,6 +1,13 @@
 import prisma from "@/lib/prisma"
 import Link from "next/link"
-import { format, startOfMonth, startOfWeek } from "date-fns"
+import {
+  eachDayOfInterval,
+  format,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+  subDays,
+} from "date-fns"
 import { es } from "date-fns/locale"
 import DashboardCharts from "@/components/charts/DashboardCharts"
 
@@ -8,9 +15,11 @@ import DashboardCharts from "@/components/charts/DashboardCharts"
 export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
-  const fifteenDaysAgo = new Date();
-  fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
-  fifteenDaysAgo.setHours(0, 0, 0, 0);
+  /** Ventana del gráfico: 15 días calendario (hoy + 14 atrás), siempre 15 puntos en el eje X. */
+  const chartEnd = startOfDay(new Date())
+  const chartStart = subDays(chartEnd, 14)
+  const chartDays = eachDayOfInterval({ start: chartStart, end: chartEnd })
+  const chartDateKeys = chartDays.map((d) => format(d, "yyyy-MM-dd"))
 
   const todayStart = new Date()
   todayStart.setHours(0, 0, 0, 0)
@@ -58,8 +67,8 @@ export default async function DashboardPage() {
       where: {
         order: {
           status: "COMPLETADO",
-          completed_at: { gte: fifteenDaysAgo }
-        }
+          completed_at: { gte: chartStart },
+        },
       },
       include: {
         order: { select: { completed_at: true } },
@@ -67,7 +76,7 @@ export default async function DashboardPage() {
       }
     }),
     prisma.order.findMany({
-      where: { status: "COMPLETADO", completed_at: { gte: fifteenDaysAgo } },
+      where: { status: "COMPLETADO", completed_at: { gte: chartStart } },
       include: { client: { select: { client_type: true } } }
     }),
     prisma.product.findMany({
@@ -81,32 +90,40 @@ export default async function DashboardPage() {
 
   // ---------- DATA PARSING FOR ECHARTS ----------
   
-  // 1. Line Chart: Revenue by Brand By Date
-  const datesSet = new Set<string>();
-  const brandsSet = new Set<string>();
-  const lineRaw: Record<string, Record<string, number>> = {}; 
+  // 1. Líneas: ingresos por marca por día (eje X = 15 días fijos; días sin ventas = 0)
+  const brandsSet = new Set<string>()
+  const lineRaw: Record<string, Record<string, number>> = {}
+  for (const k of chartDateKeys) lineRaw[k] = {}
 
-  recentOrderItems.forEach(item => {
-    const dateObj = item.order.completed_at || new Date();
-    const dateStr = format(dateObj, "yyyy-MM-dd");
-    const brand = item.product.brand;
-    
-    datesSet.add(dateStr);
-    brandsSet.add(brand);
-    
-    if (!lineRaw[dateStr]) lineRaw[dateStr] = {};
-    lineRaw[dateStr][brand] = (lineRaw[dateStr][brand] || 0) + Number(item.subtotal);
-  });
+  recentOrderItems.forEach((item) => {
+    const completed = item.order.completed_at
+    if (!completed) return
+    const dateStr = format(startOfDay(new Date(completed)), "yyyy-MM-dd")
+    if (!(dateStr in lineRaw)) return
+    const brand = item.product.brand
+    brandsSet.add(brand)
+    lineRaw[dateStr][brand] =
+      (lineRaw[dateStr][brand] || 0) + Number(item.subtotal)
+  })
 
-  const sortedDates = Array.from(datesSet).sort();
-  const brands = Array.from(brandsSet);
+  const brandsFromCatalog = [
+    ...new Set(productsStock.map((p) => p.brand as string)),
+  ].sort()
+  const brands = [
+    ...new Set([...brandsFromCatalog, ...Array.from(brandsSet)]),
+  ].sort()
 
-  const series = brands.map(brand => {
-    const data = sortedDates.map(dateStr => lineRaw[dateStr][brand] || 0);
-    return { name: brand, type: 'line', smooth: true, data };
-  });
+  const series = brands.map((brand) => ({
+    name: brand,
+    type: "line" as const,
+    smooth: true,
+    connectNulls: true,
+    data: chartDateKeys.map((k) => lineRaw[k][brand] || 0),
+  }))
 
-  const xAxisData = sortedDates.map(d => format(new Date(d + 'T12:00:00Z'), 'dd MMM', { locale: es }));
+  const xAxisData = chartDays.map((d) =>
+    format(d, "dd MMM", { locale: es })
+  )
 
   const lineChartData = { xAxisData, series, brands }
 

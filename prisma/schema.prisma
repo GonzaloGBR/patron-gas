@@ -68,7 +68,7 @@ model Client {
 model Product {
   id          Int      @id @default(autoincrement())
   brand       Brand
-  weight      Int      // 10 or 15
+  weight      Int      // ej. 10, 15 (kg)
   stock_full  Int      @default(0)
   stock_empty Int      @default(0)
   created_at  DateTime @default(now())

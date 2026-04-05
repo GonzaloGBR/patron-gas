@@ -105,7 +105,7 @@ export default function DashboardCharts({ lineChart, pieChart, stockChart }: Das
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden pt-5 px-5">
-           <h3 className="text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Porción de Mercado (últ. 15 drías)</h3>
+           <h3 className="text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Porción de Mercado (últ. 15 días)</h3>
            <p className="text-xs text-slate-500 mb-2 border-b border-slate-100 pb-4">De dónde provienen tus ingresos según categoría de cliente.</p>
            <div className="h-[250px] w-full">
              <ReactECharts option={pieOptions} style={{ height: '100%', width: '100%' }} />
