@@ -22,6 +22,10 @@ const protectedMiddleware = withAuth(
 
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
   const p = req.nextUrl.pathname
+  /** Archivos en `public/brand/*` — si pasan por withAuth, sin cookie devuelven HTML de login y el logo se rompe. */
+  if (p.startsWith("/brand/")) {
+    return NextResponse.next()
+  }
   if (p === "/api/health") {
     return NextResponse.next()
   }
