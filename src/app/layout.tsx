@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import Providers from "@/components/Providers"
+import { getMetadataBase } from "@/lib/site-url"
 
 export const metadata: Metadata = {
+  metadataBase: getMetadataBase(),
   title: "Patrón del Gas",
   description: "Sistema de gestión de ventas y préstamos",
   icons: {
