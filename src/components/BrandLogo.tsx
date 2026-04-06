@@ -19,6 +19,7 @@ export default function BrandLogo({
   className = "",
   priority,
 }: BrandLogoProps) {
+  // Sin /_next/image: en algunos hostings el optimizador falla y el logo no carga.
   return (
     <Image
       src="/brand/logo.png"
@@ -26,6 +27,7 @@ export default function BrandLogo({
       width={256}
       height={256}
       priority={priority}
+      unoptimized
       className={`object-contain ${sizes[variant]} ${className}`}
     />
   )
