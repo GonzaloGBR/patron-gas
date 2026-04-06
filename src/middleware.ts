@@ -26,9 +26,6 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (p.startsWith("/brand/")) {
     return NextResponse.next()
   }
-  if (p === "/api/health") {
-    return NextResponse.next()
-  }
   if (p === "/acceso" || p === "/login") {
     const res = NextResponse.next()
     res.headers.set("Cache-Control", NO_STORE)
@@ -37,7 +34,10 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   return protectedMiddleware(req as NextRequestWithAuth, event)
 }
 
-/** Solo excluye `api/auth`; el resto de `/api/*` sigue protegido por sesión. */
+/**
+ * Excluye `api/auth` y `api/health` (probes del proxy / hosting sin pasar por withAuth).
+ * El resto de `/api/*` sigue protegido por sesión.
+ */
 export const config = {
-  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api/auth|api/health|_next/static|_next/image|favicon.ico).*)"],
 }

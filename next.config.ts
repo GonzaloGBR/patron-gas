@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   /** No enviar cabecera que delata Next.js. */
   poweredByHeader: false,
+  /** Nativos (bcrypt) y Prisma: evita que el bundler rompa el binario en producción. */
+  serverExternalPackages: ["bcrypt", "@prisma/client"],
   async rewrites() {
     return [
       /** Peticiones legacy a /favicon.ico → mismo logo que la pestaña. */
