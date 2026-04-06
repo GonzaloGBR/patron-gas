@@ -1,276 +1,261 @@
-# Manual del sistema — Patrón del Gas
+# Manual de uso — Patrón del Gas
 
-Guía sencilla para entender **qué hace** el sistema, **cómo se usa** en el día a día y **qué ves** en cada pantalla. Está pensada para dueños, administrativos o cualquier persona que opere el panel sin conocimientos técnicos.
+**Para el dueño y el equipo que usa el panel día a día.**  
+No hace falta saber nada de informática avanzada: acá se explica **qué es** el sistema, **para qué sirve cada parte** y **qué tenés que tocar** en cada situación común.
 
 ---
 
-## Tabla de contenidos
+## Cómo guardar esto en PDF o imprimirlo
 
-1. [¿Qué es este sistema?](#1-qué-es-este-sistema)
-2. [Cómo entrar](#2-cómo-entrar)
-3. [Recorrido general](#3-recorrido-general)
-4. [Pantalla principal (Dashboard)](#4-pantalla-principal-dashboard)
+1. Abrí este archivo con un programa que lea documentos (Word, Google Docs, o el bloc de notas del celular si te lo enviaron).
+2. **En la computadora**, si lo abrís en el navegador o en Word: menú **Archivo** → **Imprimir** → elegí **Guardar como PDF** (o **Microsoft Print to PDF**) en lugar de una impresora.
+3. Así te queda un **solo archivo** que podés tener en el mostrador, mandar por WhatsApp al encargado del depósito o imprimir cuando quieras.
+
+---
+
+## Índice
+
+1. [Qué es este sistema en pocas palabras](#1-qué-es-este-sistema-en-pocas-palabras)
+2. [Cómo entrar al panel](#2-cómo-entrar-al-panel)
+3. [Un día normal usando el sistema](#3-un-día-normal-usando-el-sistema)
+4. [La pantalla de inicio (resumen del negocio)](#4-la-pantalla-de-inicio-resumen-del-negocio)
 5. [Clientes](#5-clientes)
-6. [Productos](#6-productos)
-7. [Stock](#7-stock)
+6. [Productos y precios](#6-productos-y-precios)
+7. [Stock (llenas y vacías)](#7-stock-llenas-y-vacías)
 8. [Ventas](#8-ventas)
-9. [Préstamos de envases](#9-préstamos-de-envases)
-10. [Tipos de cliente y precios](#10-tipos-de-cliente-y-precios)
-11. [Imágenes de apoyo (opcional)](#11-imágenes-de-apoyo-opcional)
-12. [Resumen rápido](#12-resumen-rápido)
+9. [Préstamos de envases vacíos](#9-préstamos-de-envases-vacíos)
+10. [Los tres tipos de cliente (y por qué importan)](#10-los-tres-tipos-de-cliente-y-por-qué-importan)
+11. [Resumen: “quiero hacer esto, voy acá”](#11-resumen-quiero-hacer-esto-voy-acá)
+12. [Si algo no te deja guardar o no entrás](#12-si-algo-no-te-deja-guardar-o-no-entrás)
 
 ---
 
-## 1. ¿Qué es este sistema?
+## 1. Qué es este sistema en pocas palabras
 
-**Patrón del Gas** es un **panel web** para la operación diaria de un negocio de garrafas:
+**Patrón del Gas** es una **página web privada** (un “panel”) donde anotás todo lo que pasa en el negocio de garrafas:
 
-| Función | Para qué sirve |
-|--------|----------------|
-| **Clientes** | Guardar quién compra, teléfono, dirección y **tipo** de cliente (define el precio). |
-| **Productos** | Listado de envases (marca y kilos) y **precios** según el tipo de cliente. |
-| **Stock** | Cuántas garrafas **llenas** y **vacías** tenés en depósito por cada producto. |
-| **Ventas** | Registrar pedidos y cobros; el sistema **descuenta** garrafas llenas y puede **sumar** vacías devueltas. |
-| **Préstamos** | Anotar que un cliente **debe** envases vacíos; el sistema puede **descontar** vacías del stock al prestar. |
+| Sección del menú | En la vida real sirve para… |
+|------------------|-----------------------------|
+| **Clientes** | Tener el nombre, teléfono, dirección y **qué tipo de cliente es** (porque según eso cambia el precio). |
+| **Productos** | Ver qué envases vendés (marca y kilos) y **cuánto cuesta cada uno** para cada tipo de cliente. |
+| **Stock** | Saber cuántas garrafas **llenas** y **vacías** tenés en el depósito de cada producto. |
+| **Ventas** | Registrar pedidos y cobros; el sistema **resta** las llenas que salieron y puede **sumar** las vacías que volvieron. |
+| **Préstamos** | Anotar cuando alguien se lleva **vacíos** y todavía **te los debe**; cuando paga con devolución, lo cerrás ahí. |
 
-Todo queda registrado con fechas para consultar después.
-
----
-
-## 2. Cómo entrar
-
-1. Abrís la dirección del sitio (por ejemplo la que te dio Hostinger).
-2. Vas a la pantalla de **Iniciar sesión** (la dirección suele terminar en `/acceso`; si entrás por un enlace antiguo a `/login`, el sistema te redirige igual).
-3. Ingresás **email** y **contraseña** que te asignaron (el administrador los crea en la base de datos con scripts o soporte técnico).
-
-Si el email o la contraseña no coinciden, verás un mensaje de error y no entrás al panel.
-
-> **Nota técnica:** El acceso lo gestiona el dueño o quien administre el servidor (variables de entorno, usuarios en base de datos). Este manual no cubre la creación de usuarios en el hosting.
+Todo queda **con fecha**, así después podés repasar qué pasó.
 
 ---
 
-## 3. Recorrido general
+## 2. Cómo entrar al panel
 
-Flujo típico de un día:
+1. Abrís el **sitio web del negocio** (el enlace que te dieron: puede decir “Patrón del Gas” o la dirección que configuraron).
+2. Te va a pedir **Iniciar sesión**.
+3. Ponés el **correo electrónico** y la **contraseña** que te asignaron (solo quien administra el negocio o la persona de soporte puede crear o cambiar esos datos).
 
-```mermaid
-flowchart LR
-  A[Clientes] --> B[Ventas]
-  C[Stock] --> B
-  D[Préstamos] --> C
-  B --> E[Dashboard]
-```
-
-1. **Cargás o revisás clientes** (sobre todo los nuevos).
-2. **Mirás el stock** si hace falta antes de prometer cantidades.
-3. **Registrás ventas** cuando entregás o cobrás.
-4. Si alguien se lleva vacíos sin dejar vacío, **registrás préstamo** (deuda de envases).
-5. El **Dashboard** te muestra totales y gráficos resumidos.
+Si el correo o la clave no son correctos, **no vas a entrar**: aparece un aviso. En ese caso tenés que **pedir que te reseteen la contraseña** o te den un usuario nuevo a quien corresponda (no está explicado en este manual porque depende de cada negocio).
 
 ---
 
-## 4. Pantalla principal (Dashboard)
+## 3. Un día normal usando el sistema
 
-Al entrar ves el **panel principal**. Suele incluir:
+Un orden que suele funcionar bien:
 
-- **Recaudación** de hoy, de la semana y del mes (ventas ya **completadas**).
-- **Pedidos pendientes** (ventas guardadas como “en camino” que aún no completaste).
-- **Cantidad de clientes** registrados.
-- **Gráficos** (por ejemplo ingresos por marca en los últimos 15 días, torta por tipo de cliente, barras de stock lleno vs vacío).
-- **Últimos movimientos** de stock y **últimas ventas**.
+1. **Revisar o cargar clientes nuevos** (sobre todo si cambian de categoría o son clientes nuevos).
+2. **Mirar el stock** si vas a prometer cantidades por teléfono o WhatsApp.
+3. **Cargar las ventas** cuando entregás y cobrás (o cuando tomás el pedido y después lo cerrás).
+4. Si alguien se llevó **vacíos** y todavía **no te los devolvió**, eso va en **Préstamos** (no se “inventa” solo con la venta).
+5. **La pantalla de inicio** te da un resumen: plata del día, pendientes, gráficos, últimos movimientos.
 
-Sirve para una **vista rápida**; el detalle está en cada sección del menú.
+No hace falta seguir siempre el mismo orden; es una guía para no olvidar nada importante.
+
+---
+
+## 4. La pantalla de inicio (resumen del negocio)
+
+Cuando entrás, lo primero que ves suele ser un **resumen**:
+
+- **Plata cobrada** (recaudación) de **hoy**, de la **semana** y del **mes** — solo cuenta ventas ya **terminadas** (no las que siguen “en camino”).
+- **Pedidos pendientes**: ventas que anotaste pero **todavía no completaste**; conviene atenderlos para no confundirse.
+- **Cantidad de clientes** que tenés dados de alta.
+- **Gráficos** (si aparecen en tu pantalla): por ejemplo plata por marca en los últimos días, cómo se reparte por tipo de cliente, o llenas vs vacías.
+- **Últimos movimientos** de depósito y **últimas ventas**.
+
+El detalle fino de cada cosa está en el **menú** (Clientes, Stock, Ventas, etc.). La pantalla de inicio es para **mirar rápido** cómo va el día.
 
 ---
 
 ## 5. Clientes
 
-### Qué permite el sistema
+### Qué podés hacer
 
-- **Listar** todos los clientes activos.
-- **Buscar** por nombre, teléfono, dirección o categoría (hay un buscador en el listado).
-- **Agregar** un cliente nuevo.
-- **Editar** datos o categoría.
+- Ver la **lista** de clientes activos.
+- **Buscar** por nombre, teléfono, dirección o categoría (si hay un cuadro de búsqueda).
+- **Agregar** uno nuevo.
+- **Editar** datos si cambió el teléfono, la dirección o el tipo de cliente.
 
-### Datos importantes de un cliente
+### Datos que importan de cada cliente
 
-| Campo | Ejemplo | Importante porque… |
-|-------|---------|---------------------|
-| Nombre y apellido | “María López” | Identificás al comprador. |
-| Teléfono | 11-2345-6789 | Contacto para pedidos. |
-| Dirección | Calle Falsa 123 | Referencia de entrega. |
-| **Categoría** | Domicilio / Establecimiento / Mayorista | **Define el precio** de las garrafas en la venta. |
+| Dato | Ejemplo | Por qué lo pedimos |
+|------|---------|---------------------|
+| Nombre y apellido | María López | Para saber de quién es el pedido. |
+| Teléfono | 11-2345-6789 | Para llamar o mandar mensaje. |
+| Dirección | Calle… número… | Para la entrega. |
+| **Categoría** (tipo de cliente) | Una de tres opciones del sistema | **Acá se define el precio** de las garrafas cuando hacés la venta. |
 
-### Ejemplo didáctico
+### Ejemplo sencillo
 
-> **Situación:** Entra un nuevo bar que compra al precio “sandwichería”.  
-> **Qué hacés:** Clientes → **Agregar cliente** → completás datos y elegís categoría **Establecimiento** (en el sistema el nombre técnico es ese; en tu negocio lo llamás “sandwichería / comedor”).  
-> **Resultado:** Cuando hagas una venta a ese cliente, el sistema usará los precios de **Establecimiento** para cada marca/kilo.
+**Situación:** Entra un bar nuevo que paga como “comercio / sandwichería”, no como casa particular.
 
----
+**Qué hacés:** Vas a **Clientes** → **Agregar cliente** (o el botón parecido) → completás nombre, teléfono, dirección → en categoría elegís la que en el sistema se llama **Establecimiento** (es la que corresponde a bares, locales, etc.).
 
-## 6. Productos
-
-### Qué muestra
-
-- Cada **envase** del catálogo: **marca** (por ejemplo HIPERGAS, YPF, VARIGAS) y **peso** (10 kg, 15 kg, etc.).
-- Los **precios** no van “sueltos” en el producto: hay **tres precios por producto**, uno por cada **tipo de cliente** (domicilio, establecimiento, mayorista).
-
-### Ejemplo
-
-| Producto | Domicilio | Establecimiento | Mayorista |
-|----------|-----------|-----------------|-----------|
-| HIPERGAS 10 kg | $19.000 | $17.500 | $15.000 |
-| YPF 10 kg | $24.000 | $22.000 | $18.500 |
-
-*(Los valores reales son los que cargó el dueño en la base de datos / seed.)*
-
-Si cambian los precios del mercado, quien administre el sistema actualiza productos o ejecuta scripts de carga según cómo esté armado el proyecto.
+**Resultado:** Cuando hagas una venta a ese cliente, el sistema va a usar los precios de **Establecimiento** para cada marca y kilo.
 
 ---
 
-## 7. Stock
+## 6. Productos y precios
 
-### Qué es “stock lleno” y “stock vacío”
+### Qué vas a ver
 
-- **Llenas:** garrafas listas para **vender** (entregás llena al cliente).
-- **Vacías:** envases vacíos en depósito (las que **recibís** de vuelta o usás para préstamos).
+- Cada **tipo de envase** que vendés: **marca** (por ejemplo HIPERGAS, YPF, VARIGAS) y **kilos** (10, 15, etc.).
+- Para **cada** envase hay **tres precios**: uno para clientes **domicilio**, uno para **establecimiento** y uno para **mayorista**. La venta usa automáticamente el que toca según la ficha del cliente.
 
-### Qué permite la pantalla
+### Ejemplo de cómo se lee
 
-- Ver por cada producto cuántas **llenas** y **vacías** hay.
-- **Ajustar** números cuando haga falta (por ejemplo inventario físico), según las herramientas que tenga tu versión del sistema.
+| Envase | Precio domicilio | Precio establecimiento | Precio mayorista |
+|--------|------------------|------------------------|------------------|
+| HIPERGAS 10 kg | (el que cargaron) | (el que cargaron) | (el que cargaron) |
+| YPF 10 kg | (el que cargaron) | (el que cargaron) | (el que cargaron) |
 
-### Cómo cambia el stock automáticamente
+Los números reales son **los que cargó el dueño o el administrador** en el sistema. Si suben los precios del mercado, hay que **actualizarlos acá** (o pedir que lo haga quien mantiene el sistema).
 
-| Acción | Efecto típico en stock |
-|--------|-------------------------|
-| **Venta completada** | Bajan **llenas** según lo vendido; pueden subir **vacías** si cargás cuántas devolvió el cliente en el momento. |
-| **Préstamo manual** (deuda) | Puede **bajar** el stock de **vacías** si configuraste el negocio así: prestás vacío “de depósito”. |
-| **Saldar préstamo** | Cuando el cliente devuelve, suelen **volver a subir** las vacías al depósito (según la lógica del sistema). |
+---
+
+## 7. Stock (llenas y vacías)
+
+### Qué significa cada cosa
+
+- **Llenas:** garrafas **listas para vender** (se las llevás llenas al cliente).
+- **Vacías:** envases **vacíos** que tenés en depósito (los que te devuelven, o los que prestás).
+
+### Qué podés hacer en la pantalla
+
+- Ver, **producto por producto**, cuántas **llenas** y cuántas **vacías** hay.
+- Si tu versión del sistema lo permite, **corregir números** cuando hiciste inventario físico y no coincidía con la pantalla.
+
+### Cómo se mueve el stock solo (sin que lo cargues a mano cada vez)
+
+| Lo que pasó en el negocio | Qué suele pasar en el sistema |
+|---------------------------|-------------------------------|
+| Marcás una venta como **terminada** | Bajan las **llenas** vendidas; si cargaste cuántas **vacías** te devolvieron en ese momento, suben las vacías. |
+| Registrás un **préstamo** de vacíos | Pueden **bajar** las **vacías** del depósito (porque salieron “en préstamo”). |
+| **Saldás** un préstamo cuando te devuelven | Las **vacías** vuelven a subir en el depósito (según cómo quedó cargado el préstamo). |
 
 ---
 
 ## 8. Ventas
 
-### Estados del pedido
+### Estados del pedido (palabras simples)
 
-Al cargar una venta podés elegir (según pantalla):
+| Estado | Qué significa para vos |
+|--------|-------------------------|
+| **Completado** (o entregado) | Ya salió la mercadería y está cobrado (o registrado el cobro). **En este momento el sistema descuenta las llenas** del stock. |
+| **Pendiente** | Tomaste el pedido pero **todavía no lo cerraste**: las llenas **no** se restan del stock hasta que lo completes. |
+| **Cancelado** | No cuenta como venta vigente. |
 
-| Estado | Significado práctico |
-|--------|----------------------|
-| **Completado / Entregado** | Ya entregaste y cobrás (o cobraste). **Descuenta garrafas llenas** del stock en ese momento. |
-| **Pendiente** | Pedido tomado pero **aún no** descontó stock de llenas: lo completás después desde la venta. |
-| **Cancelado** | No se opera como venta válida en curso. |
+### Pasos para cargar una venta nueva (orden general)
 
-### Cómo cargar una venta nueva (idea general)
+1. Entrás a **Ventas** y elegís **Nueva venta** (o el botón equivalente).
+2. Elegís el **cliente** (así el sistema ya sabe qué lista de precios usar).
+3. Por cada tipo de garrafa, ponés **cuántas llenas** vendés.
+4. Si la venta va **completada**, podés decir **cuántas vacías** te devolvieron en el acto (si no devolvió ninguna, dejás cero).
+5. Elegís **cómo pagó** (efectivo o transferencia), si aplica en tu pantalla.
+6. Guardás.
 
-1. **Ventas** → **Nueva venta** (o botón equivalente en el panel).
-2. Elegís **cliente** (así el sistema sabe qué **lista de precios** usar).
-3. Por cada tipo de garrafa, indicás **cuántas llenas** vendés.
-4. Si la venta va **completada**, podés indicar **cuántas vacías** te devolvió el cliente en el acto (no obligatorio en cero).
-5. Elegís **método de cobro** (efectivo / transferencia) si aplica.
-6. Confirmás.
-
-### Validación de stock (garrafas llenas)
-
-El sistema **no deja** vender más **llenas** de las que hay en stock.
+### El sistema no te deja vender llenas que no tenés
 
 **Ejemplo:**
 
-- Tenés **5** HIPERGAS 15 kg llenas.
-- Intentás vender **10**.
-- **No se guarda** la venta: aparece un mensaje del tipo *“No alcanza el stock de garrafas llenas: HIPERGAS 15 kg (disponibles: 5, pedidas: 10).”*
+- En stock tenés **5** garrafas llenas de HIPERGAS 15 kg.
+- Intentás cargar una venta de **10**.
 
-Así **no aparecen números negativos** en stock por error de carga.
+**No va a guardar** y te va a avisar algo como: no alcanza el stock (te dice cuántas hay y cuántas pediste). Así **no se “rompen” los números** del depósito por un error de carga.
 
-### Pedidos pendientes
+### Pedidos que dejaste “pendientes”
 
-1. Creás el pedido como **Pendiente** (no descuenta llenas todavía).
-2. Cuando entregás, entrás a **completar** ese pedido, cargás forma de pago y vacías devueltas si corresponde.
-3. Al completar, se aplican las mismas reglas de **stock de llenas** (si ahora no alcanza, **no** completa y avisa).
+1. Los cargás como **Pendiente** (no bajan las llenas todavía).
+2. Cuando salís a entregar, entrás a **completar** ese pedido: cargás forma de pago y vacías devueltas si corresponde.
+3. Si al momento de completar **ya no alcanza el stock de llenas**, el sistema **no** deja cerrar y te avisa: tenés que ajustar cantidades o el stock real.
 
-### Qué **no** hace automáticamente la venta (según la configuración actual)
+### Importante
 
-- **No** suma deuda de préstamo solo porque el cliente no devolvió vacíos: eso lo cargás vos en **Préstamos** si corresponde.
+Si el cliente **no te devolvió vacíos** y eso es una **deuda aparte**, eso no siempre queda automático en “préstamos”: según cómo trabajen, puede hacer falta **anotarlo en Préstamos** además de la venta.
 
 ---
 
-## 9. Préstamos de envases
+## 9. Préstamos de envases vacíos
 
 ### Idea general
 
-Sirve para llevar la **cuenta corriente de envases vacíos**: cuántos **debe** un cliente por tipo de garrafa (marca/kilo).
+Es la **cuenta de envases vacíos** que **te deben** (o movimientos especiales de vacíos), **por cliente** y **por tipo de garrafa** (marca y kilos).
 
-### Registrar una deuda
+### Cómo registrar que alguien debe vacíos
 
-1. **Préstamos** → formulario de registro.
+1. Vas a **Préstamos**.
 2. Elegís **cliente**, **producto** (marca/kilo) y **cantidad**.
-3. Opcional: una **observación** (texto libre).
+3. Podés escribir una **nota** si querés aclarar algo.
 
-**Stock vacío:** al registrar, el sistema puede **descontar** del stock de **vacías** ese producto. Si no hay suficientes vacías en depósito, **no** deja guardar y te dice cuántas hay.
+**Atención:** al guardar, el sistema puede **restar** del stock de **vacías** del depósito. Si **no hay** suficientes vacías cargadas, **no** va a dejar guardar y te dice cuántas hay — así no quedan números imposibles.
 
-### Saldar
+### Cómo cerrar cuando te devuelven
 
-En el listado de deudores, el botón tipo **Saldar** indica que el cliente **devolvió** (o se regularizó) esa deuda: el sistema **ajusta** el stock de vacías y cierra ese registro de deuda para ese cliente/producto.
+En el listado suele haber una opción tipo **Saldar**: significa que **regularizaste** esa deuda (el cliente devolvió o se acordó otra solución). El sistema **ajusta** las vacías del depósito y **cierra** ese registro de deuda para ese cliente y ese producto.
 
 ### Ejemplo
 
-> Prestás 2 vacíos de HIPERGAS 10 kg a un cliente sin que venga de una venta recién cargada.  
-> Registrás **cantidad 2** en préstamos para ese cliente y producto.  
-> Si había 10 vacías en stock, pasan a **8**.  
-> Cuando trae los envases, **Saldar** y el stock de vacías vuelve a reflejar la devolución.
+Prestás **2 vacíos** de HIPERGAS 10 kg a un cliente que no venía de una venta recién cargada.
+
+- Registrás **2** en préstamos para ese cliente y ese producto.
+- Si en depósito había **10 vacías**, el sistema puede mostrar **8** después.
+- Cuando te trae los envases, usás **Saldar** y el stock de vacías vuelve a reflejar la devolución.
 
 ---
 
-## 10. Tipos de cliente y precios
+## 10. Los tres tipos de cliente (y por qué importan)
 
-En la base de datos los tipos se llaman:
+En el sistema los tipos tienen estos nombres:
 
-| Nombre en sistema | Suele usarse para… |
-|-------------------|-------------------|
-| **DOMICILIO** | Clientes finales / casa. |
-| **ESTABLECIMIENTO** | Bares, sandwicherías, comedores, etc. |
-| **MAYORISTA** | Compra por mayor. |
+| Nombre en pantalla | Suele usarse para… |
+|--------------------|--------------------|
+| **Domicilio** | Personas o casas que compran para uso propio. |
+| **Establecimiento** | Bares, sandwicherías, comedores, locales. |
+| **Mayorista** | Clientes que compran por mayor. |
 
-Cada venta toma el precio del ítem según el **tipo del cliente** elegido en la ficha del cliente.
-
----
-
-## 11. Imágenes de apoyo (opcional)
-
-Este manual es texto para que **cualquiera** lo lea sin depender de capturas. Si querés enriquecerlo:
-
-1. Creá una carpeta, por ejemplo: `docs/capturas/`.
-2. Guardá ahí pantallazos con nombres claros:
-   - `01-login.png`
-   - `02-dashboard.png`
-   - `03-clientes-lista.png`
-   - `04-venta-nueva.png`
-   - `05-prestamos.png`
-3. En este mismo archivo Markdown podés enlazarlos así (cuando existan los archivos):
-
-```markdown
-![Pantalla de login](capturas/01-login.png)
-```
-
-> **Sugerencia:** Subí las capturas al repositorio solo si no muestran datos sensibles (teléfonos reales, montos privados). Podés usar datos de prueba en un entorno de demo.
+**Cada venta** usa el precio que corresponde al **tipo** que figura en la ficha del cliente. Por eso es importante **no equivocar la categoría** al dar de alta o editar un cliente.
 
 ---
 
-## 12. Resumen rápido
+## 11. Resumen: “quiero hacer esto, voy acá”
 
-| Quiero… | Dónde voy… |
-|---------|------------|
-| Ver números del día / gráficos | **Dashboard** (inicio) |
+| Quiero… | Dónde en el menú |
+|---------|------------------|
+| Ver cómo va el día, gráficos, últimos movimientos | **Inicio** (pantalla principal al entrar) |
 | Dar de alta o buscar un cliente | **Clientes** |
-| Ver precios y envases | **Productos** |
-| Ver o ajustar llenas y vacías | **Stock** |
-| Registrar una venta | **Ventas** → Nueva |
-| Completar un pedido que estaba pendiente | **Ventas** → abrir el pedido → Completar |
-| Anotar que alguien debe vacíos | **Préstamos** |
-| Cuando devuelven vacíos | **Préstamos** → **Saldar** |
+| Ver envases y precios por tipo de cliente | **Productos** |
+| Ver o corregir cuántas llenas y vacías hay | **Stock** |
+| Registrar una venta nueva | **Ventas** → Nueva |
+| Cerrar un pedido que estaba pendiente | **Ventas** → abrir el pedido → **Completar** |
+| Anotar que alguien debe envases vacíos | **Préstamos** |
+| Cuando te devolvieron los vacíos | **Préstamos** → **Saldar** |
 
 ---
 
-*Documento generado para el proyecto Patrón del Gas. Si el sistema cambia (nuevas pantallas o reglas), conviene actualizar este manual en la misma carpeta `docs/`.*
+## 12. Si algo no te deja guardar o no entrás
+
+- **No entrás con usuario y clave:** pedí a quien administra el negocio que revise el correo y la contraseña o que te genere acceso nuevo.
+- **No te deja guardar una venta por stock:** el mensaje te dice **qué producto** y **cuántas** hay vs cuántas pediste; ajustá la cantidad o revisá el **Stock** si el número en pantalla no coincide con el depósito real.
+- **No te deja un préstamo:** suele ser porque **no hay suficientes vacías** en stock; revisá el depósito y el número cargado en **Stock**.
+- **Algo que no entendés:** anotá **qué pantalla** estabas usando y **qué mensaje** salió (o sacale una foto) y pedí ayuda a quien mantiene el sistema o al soporte del hosting.
+
+---
+
+*Manual para uso operativo de **Patrón del Gas**. Si cambian pantallas o reglas del negocio, conviene pedir que actualicen este documento para que siga coincidiendo con lo que ves en la computadora o el celular.*
