@@ -5,6 +5,10 @@ import Providers from "@/components/Providers"
 export const metadata: Metadata = {
   title: "Patrón del Gas",
   description: "Sistema de gestión de ventas y préstamos",
+  icons: {
+    icon: [{ url: "/brand/logo.png", type: "image/png" }],
+    apple: "/brand/logo.png",
+  },
 }
 
 export default function RootLayout({
