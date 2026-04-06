@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Product } from "@prisma/client"
-import { updateStockBatch } from "@/actions/stock"
+import { updateStockBatch, type StockBatchUpdate } from "@/actions/stock"
 
 interface DraftState {
   stock_full: string
@@ -57,7 +57,7 @@ export default function StockTableEditor({ products }: { products: Product[] }) 
         }
         return null
       })
-      .filter(Boolean) as any[]
+      .filter((u): u is StockBatchUpdate => u !== null)
 
     if (updates.length > 0) {
       try {

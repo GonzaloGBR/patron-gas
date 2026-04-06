@@ -62,6 +62,7 @@ model Client {
   loans       ClientCylinderLoan[]
   orders      Order[]
 
+  @@index([is_active, created_at])
   @@map("clients")
 }
 
@@ -103,6 +104,8 @@ model ClientCylinderLoan {
   quantity_owed Int      @default(0)
   updated_at    DateTime @updatedAt
 
+  @@index([updated_at])
+  @@index([quantity_owed])
   @@map("client_cylinder_loans")
 }
 
@@ -118,6 +121,8 @@ model Order {
 
   items          OrderItem[]
 
+  @@index([status, completed_at])
+  @@index([created_at])
   @@map("orders")
 }
 
@@ -144,5 +149,6 @@ model StockMovement {
   description           String?
   created_at            DateTime     @default(now())
 
+  @@index([created_at])
   @@map("stock_movements")
 }

@@ -36,7 +36,16 @@ export async function createClient(formData: FormData) {
   revalidatePath("/clients")
 }
 
-export async function updateClient(formState: any, formData: FormData) {
+export type ClientUpdateFormState =
+  | { success: true }
+  | { success: false; error: string }
+  | null
+  | undefined
+
+export async function updateClient(
+  _prev: ClientUpdateFormState,
+  formData: FormData
+) {
   const id = Number(formData.get("id"))
   const first_name = formData.get("first_name") as string
   const last_name = formData.get("last_name") as string
@@ -57,7 +66,7 @@ export async function updateClient(formState: any, formData: FormData) {
     })
     revalidatePath("/clients")
     return { success: true }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Error updating client" }
   }
 }
@@ -70,7 +79,7 @@ export async function deleteClient(id: number) {
     })
     revalidatePath("/clients")
     return { success: true }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Error deleting client" }
   }
 }

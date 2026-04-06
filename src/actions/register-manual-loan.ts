@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { executeManualLoan } from "@/lib/manual-loan"
+import { logError } from "@/lib/log"
 
 /** Archivo solo con esta acción: evita problemas de serialización mezclando muchas exports. */
 export async function registerManualLoanAction(input: {
@@ -17,12 +18,12 @@ export async function registerManualLoanAction(input: {
         revalidatePath("/loans")
         revalidatePath("/stock")
       } catch (e) {
-        console.error("registerManualLoanAction revalidatePath", e)
+        logError("registerManualLoanAction.revalidatePath", e)
       }
     }
     return result
   } catch (e) {
-    console.error("registerManualLoanAction", e)
+    logError("registerManualLoanAction", e)
     return {
       ok: false as const,
       error:

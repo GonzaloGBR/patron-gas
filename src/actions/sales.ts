@@ -3,12 +3,29 @@
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { OrderStatus, PaymentMethod } from "@prisma/client"
+import { logError } from "@/lib/log"
 
 export type SaleActionResult = { ok: true } | { ok: false; error: string }
 
+export type CreateSaleLinePayload = {
+  product_id: number | string
+  quantity: number | string
+  unit_price: number | string
+  subtotal: number | string
+}
+
+export type CreateSalePayload = {
+  client_id: number | string
+  status: string
+  payment_method?: string | null
+  total_amount: number | string
+  items: CreateSaleLinePayload[]
+  empty_returned?: Record<string, number>
+}
+
 /** Suma cantidades por producto (por si hay varias líneas del mismo envase). */
 function aggregateFullNeeded(
-  rows: { product_id: number | string; quantity: number }[]
+  rows: { product_id: number | string; quantity: number | string }[]
 ): Map<number, number> {
   const need = new Map<number, number>()
   for (const row of rows) {
@@ -49,8 +66,11 @@ export async function getCreateSaleData() {
   return { clients, products }
 }
 
-export async function createSale(data: any): Promise<SaleActionResult> {
-  const { client_id, status, payment_method, total_amount, items, empty_returned } = data
+export async function createSale(
+  data: CreateSalePayload
+): Promise<SaleActionResult> {
+  const { client_id, status, payment_method, total_amount, items, empty_returned } =
+    data
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -77,7 +97,7 @@ export async function createSale(data: any): Promise<SaleActionResult> {
           total_amount,
           completed_at: status === "COMPLETADO" ? new Date() : null,
           items: {
-            create: items.map((item: any) => ({
+            create: items.map((item) => ({
               product_id: Number(item.product_id),
               quantity: Number(item.quantity),
               unit_price_at_sale: item.unit_price,
@@ -122,7 +142,7 @@ export async function createSale(data: any): Promise<SaleActionResult> {
     if (msg === "PRODUCT_NOT_FOUND") {
       return { ok: false, error: "Uno de los productos de la venta no existe." }
     }
-    console.error("createSale", e)
+    logError("createSale", e)
     return {
       ok: false,
       error: "No se pudo registrar la venta. Revisá los datos o intentá de nuevo.",
@@ -215,7 +235,7 @@ export async function completePendingOrder(
     if (msg === "PRODUCT_NOT_FOUND") {
       return { ok: false, error: "Un producto del pedido ya no existe en el catálogo." }
     }
-    console.error("completePendingOrder", e)
+    logError("completePendingOrder", e)
     return {
       ok: false,
       error: "No se pudo completar el pedido. Intentá de nuevo.",

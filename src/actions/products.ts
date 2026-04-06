@@ -2,6 +2,18 @@
 
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import type { ClientType } from "@prisma/client"
+
+function parseClientType(raw: string): ClientType | null {
+  if (
+    raw === "DOMICILIO" ||
+    raw === "ESTABLECIMIENTO" ||
+    raw === "MAYORISTA"
+  ) {
+    return raw
+  }
+  return null
+}
 
 export async function getProductsWithPrices() {
   return await prisma.product.findMany({
@@ -15,28 +27,33 @@ export async function getProductsWithPrices() {
   })
 }
 
-export async function updateProductPrices(productId: number, prices: { client_type: string, price: number }[]) {
-  // Update each price
+export async function updateProductPrices(
+  productId: number,
+  prices: { client_type: string; price: number }[]
+) {
   for (const item of prices) {
+    const client_type = parseClientType(item.client_type)
+    if (!client_type) continue
+
     const existingPrice = await prisma.price.findFirst({
       where: {
         product_id: productId,
-        client_type: item.client_type as any
-      }
+        client_type,
+      },
     })
 
     if (existingPrice) {
       await prisma.price.update({
         where: { id: existingPrice.id },
-        data: { price: item.price }
+        data: { price: item.price },
       })
     } else {
       await prisma.price.create({
         data: {
           product_id: productId,
-          client_type: item.client_type as any,
-          price: item.price
-        }
+          client_type,
+          price: item.price,
+        },
       })
     }
   }
