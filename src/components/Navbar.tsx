@@ -29,7 +29,7 @@ export default function Navbar() {
               href="/"
               className="shrink-0 rounded-full bg-black/35 p-0.5 ring-1 ring-brand-700/45 transition-opacity hover:opacity-90"
             >
-              <BrandLogo variant="sm" className="sm:h-10 sm:w-10" />
+              <BrandLogo variant="sm" />
             </Link>
             <div className="hidden min-[380px]:flex flex-col min-w-0">
               <span className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-100">

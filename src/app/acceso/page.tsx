@@ -44,8 +44,8 @@ function AccesoForm() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-brand-950 via-brand-900 to-brand-950 px-4">
       <div className="w-full max-w-sm rounded-2xl border border-brand-700/50 bg-brand-950/70 p-8 shadow-[0_24px_80px_rgba(6,13,22,0.55)] backdrop-blur-sm">
         <div className="flex flex-col items-center">
-          <div className="rounded-full bg-black/45 p-1 ring-1 ring-brand-600/40">
-            <BrandLogo variant="hero" priority />
+          <div className="flex shrink-0 items-center justify-center rounded-full bg-black/45 p-1.5 ring-1 ring-brand-600/40">
+            <BrandLogo variant="hero" native priority />
           </div>
           <h1 className="mt-5 text-center text-lg font-semibold tracking-tight text-slate-50">
             Patrón del Gas

@@ -12,7 +12,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <div className="flex items-center justify-between gap-3 rounded-t-2xl border-b border-white/10 bg-gradient-to-r from-brand-950 via-brand-900 to-brand-950 px-4 py-3 sm:px-6 sm:py-4">
               <div className="flex min-w-0 items-center gap-3 sm:gap-4">
                 <div className="shrink-0 rounded-full bg-black/40 p-0.5 ring-1 ring-brand-700/50">
-                  <BrandLogo variant="sm" className="rounded-full sm:h-10 sm:w-10" />
+                  <BrandLogo variant="md" className="rounded-full" />
                 </div>
                 <div className="min-w-0 leading-tight">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-200">
