@@ -1,11 +1,14 @@
 "use client"
 
-import ReactECharts from 'echarts-for-react'
+import ReactECharts from "echarts-for-react"
+import type { LineSeriesPoint } from "./dashboard-chart-types"
 
-interface DashboardChartsProps {
+export type { LineSeriesPoint }
+
+export interface DashboardChartsProps {
   lineChart: {
     xAxisData: string[]
-    series: any[]
+    series: LineSeriesPoint[]
     brands: string[]
   }
   pieChart: {

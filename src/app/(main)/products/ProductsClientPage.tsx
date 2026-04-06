@@ -53,7 +53,7 @@ export default function ProductsClientPage({ initialProducts }: { initialProduct
   }
 
   return (
-    <div className="animate-in fade-in duration-500">
+    <div>
       <header className="pb-5 mb-8">
         <h1 className="text-3xl font-extrabold text-[#1b3b50] tracking-tight">Catálogo y Tarifas</h1>
         <p className="text-slate-500 font-medium mt-1">Gestión de precios por variedad de envase y categoría de cliente.</p>

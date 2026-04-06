@@ -9,7 +9,8 @@ import {
   subDays,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import DashboardCharts from "@/components/charts/DashboardCharts"
+import type { LineSeriesPoint } from "@/components/charts/dashboard-chart-types"
+import DashboardChartsLazy from "@/components/charts/DashboardChartsLazy"
 
 /** Evita pre-render en build sin conexión a la base de datos. */
 export const dynamic = "force-dynamic"
@@ -35,12 +36,23 @@ export default async function DashboardPage() {
       where: { status: "COMPLETADO" },
       orderBy: { completed_at: "desc" },
       take: 5,
-      include: { client: true }
+      select: {
+        id: true,
+        total_amount: true,
+        payment_method: true,
+        created_at: true,
+        completed_at: true,
+        client: {
+          select: { first_name: true, last_name: true },
+        },
+      },
     }),
     prisma.stockMovement.findMany({
       take: 8,
       orderBy: { created_at: "desc" },
-      include: { product: true }
+      include: {
+        product: { select: { brand: true, weight: true } },
+      },
     }),
     prisma.order.aggregate({
       where: {
@@ -80,7 +92,13 @@ export default async function DashboardPage() {
       include: { client: { select: { client_type: true } } }
     }),
     prisma.product.findMany({
-      orderBy: [{ brand: "asc" }, { weight: "asc" }]
+      orderBy: [{ brand: "asc" }, { weight: "asc" }],
+      select: {
+        brand: true,
+        weight: true,
+        stock_full: true,
+        stock_empty: true,
+      },
     })
   ])
 
@@ -113,9 +131,9 @@ export default async function DashboardPage() {
     ...new Set([...brandsFromCatalog, ...Array.from(brandsSet)]),
   ].sort()
 
-  const series = brands.map((brand) => ({
+  const series: LineSeriesPoint[] = brands.map((brand) => ({
     name: brand,
-    type: "line" as const,
+    type: "line",
     smooth: true,
     connectNulls: true,
     data: chartDateKeys.map((k) => lineRaw[k][brand] || 0),
@@ -144,7 +162,7 @@ export default async function DashboardPage() {
   // ----------------------------------------------
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-8">
       <header className="flex flex-col gap-4 border-b border-slate-200/80 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
@@ -261,7 +279,11 @@ export default async function DashboardPage() {
 
       {/* DASHBOARD CHARTS */}
       <section>
-        <DashboardCharts lineChart={lineChartData} pieChart={pieChartData} stockChart={stockChartData} />
+        <DashboardChartsLazy
+          lineChart={lineChartData}
+          pieChart={pieChartData}
+          stockChart={stockChartData}
+        />
       </section>
 
       {/* TABLES */}
@@ -291,7 +313,7 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-slate-50">
-                {movements.map((mov: any) => (
+                {movements.map((mov) => (
                   <tr key={mov.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-5 py-3 whitespace-nowrap text-[12px] font-medium text-slate-500">
                       {format(new Date(mov.created_at), "dd MMM HH:mm", { locale: es })}
@@ -300,7 +322,7 @@ export default async function DashboardPage() {
                       {mov.product.brand} {mov.product.weight}kg
                     </td>
                     <td className="px-5 py-3 whitespace-nowrap text-[11px] text-slate-600">
-                      {mov.movement_type.replace('_', ' ')}
+                      {mov.movement_type.replaceAll("_", " ")}
                     </td>
                     <td className="px-5 py-3 text-center">
                       <span className={`inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-bold rounded-md w-12 ${mov.quantity_full_change > 0 ? "bg-emerald-100 text-emerald-700" : mov.quantity_full_change < 0 ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600"}`}>
@@ -339,7 +361,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-slate-100">
-            {recentSales.map((sale: any) => (
+            {recentSales.map((sale) => (
               <div
                 key={sale.id}
                 className="flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors"
