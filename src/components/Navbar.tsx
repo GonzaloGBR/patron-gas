@@ -78,7 +78,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="mt-2 flex md:hidden gap-1 overflow-x-auto pb-2">
+        <div className="mt-2 grid grid-cols-3 gap-1.5 md:hidden pb-2">
           {navItems.map((item) => {
             const active =
               pathname === item.href || pathname.startsWith(item.href + "/")
@@ -86,7 +86,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`whitespace-nowrap rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${
+                className={`flex min-h-[2.5rem] items-center justify-center rounded-full px-2 py-1.5 text-center text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] sm:text-[11px] sm:tracking-[0.14em] ${
                   active
                     ? "bg-brand-100 text-brand-950"
                     : "bg-brand-950/70 text-slate-300 hover:text-white"

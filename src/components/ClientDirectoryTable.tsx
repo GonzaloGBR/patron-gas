@@ -78,7 +78,50 @@ export function ClientDirectoryTable({ clients }: Props) {
         </label>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="md:hidden divide-y divide-slate-100">
+        {filtered.map((client) => (
+          <div key={client.id} className="space-y-3 px-4 py-4">
+            <div className="flex items-start justify-between gap-3">
+              <p className="min-w-0 text-sm font-semibold text-slate-900">
+                {client.first_name} {client.last_name}
+              </p>
+              <Link
+                href={`/clients/${client.id}/edit`}
+                className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600 underline decoration-1 underline-offset-4 hover:text-slate-900"
+              >
+                Editar
+              </Link>
+            </div>
+            <dl className="grid gap-2 text-sm text-slate-600">
+              <div className="flex flex-wrap gap-x-2 gap-y-1">
+                <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Tel.</dt>
+                <dd className="min-w-0 break-words">{client.phone || "—"}</dd>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Dirección</dt>
+                <dd className="break-words leading-snug">{client.address || "—"}</dd>
+              </div>
+              <div>
+                <span className="inline-flex items-center rounded-full bg-slate-900 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-50">
+                  {client.client_type}
+                </span>
+              </div>
+            </dl>
+          </div>
+        ))}
+        {clients.length === 0 && (
+          <p className="px-6 py-10 text-center text-sm font-medium text-slate-400">
+            No hay clientes registrados en la base de datos.
+          </p>
+        )}
+        {clients.length > 0 && filtered.length === 0 && (
+          <p className="px-6 py-10 text-center text-sm font-medium text-slate-400">
+            No hay clientes que coincidan con &ldquo;{query.trim()}&rdquo;.
+          </p>
+        )}
+      </div>
+
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-100">
           <thead className="bg-slate-50">
             <tr>

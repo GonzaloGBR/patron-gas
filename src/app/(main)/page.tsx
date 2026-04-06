@@ -301,7 +301,58 @@ export default async function DashboardPage() {
             </Link>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="md:hidden divide-y divide-slate-100">
+            {movements.map((mov) => (
+              <div key={mov.id} className="space-y-2 px-4 py-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="text-[12px] font-medium text-slate-500">
+                    {format(new Date(mov.created_at), "dd MMM HH:mm", { locale: es })}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-800">
+                    {mov.product.brand} {mov.product.weight}kg
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-600">
+                  {mov.movement_type.replaceAll("_", " ")}
+                </p>
+                <div className="flex gap-6 pt-1">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Llenas</p>
+                    <span
+                      className={`mt-0.5 inline-flex min-w-[2.75rem] items-center justify-center rounded-md px-2 py-0.5 text-[11px] font-bold ${
+                        mov.quantity_full_change > 0
+                          ? "bg-emerald-100 text-emerald-700"
+                          : mov.quantity_full_change < 0
+                            ? "bg-red-100 text-red-700"
+                            : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {mov.quantity_full_change > 0 ? `+${mov.quantity_full_change}` : mov.quantity_full_change}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Vacías</p>
+                    <span
+                      className={`mt-0.5 inline-flex min-w-[2.75rem] items-center justify-center rounded-md px-2 py-0.5 text-[11px] font-bold ${
+                        mov.quantity_empty_change > 0
+                          ? "bg-emerald-100 text-emerald-700"
+                          : mov.quantity_empty_change < 0
+                            ? "bg-red-100 text-red-700"
+                            : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {mov.quantity_empty_change > 0 ? `+${mov.quantity_empty_change}` : mov.quantity_empty_change}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {movements.length === 0 && (
+              <p className="px-5 py-10 text-center text-xs text-slate-500">No hay movimientos registrados.</p>
+            )}
+          </div>
+
+          <div className="hidden md:block overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-100">
               <thead className="bg-slate-50">
                 <tr>

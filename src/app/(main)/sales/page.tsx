@@ -37,7 +37,62 @@ export default async function SalesPage() {
           </h2>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="md:hidden divide-y divide-slate-100">
+          {sales.map((sale: any) => (
+            <div key={sale.id} className="space-y-3 px-4 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[11px] font-semibold text-slate-500">#{sale.id}</span>
+                <span
+                  className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${
+                    sale.status === "COMPLETADO"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : sale.status === "PENDIENTE"
+                        ? "bg-orange-100 text-orange-800"
+                        : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {sale.status === "COMPLETADO"
+                    ? "Completado"
+                    : sale.status === "PENDIENTE"
+                      ? "Pendiente"
+                      : "Cancelado"}
+                </span>
+              </div>
+              <p className="text-sm font-semibold leading-snug text-slate-900">
+                {sale.client.first_name} {sale.client.last_name}
+              </p>
+              <p className="text-xs text-slate-500">
+                {format(new Date(sale.created_at), "dd MMM yyyy", { locale: es })}
+              </p>
+              <div className="flex flex-wrap items-end justify-between gap-2 border-t border-slate-100 pt-3">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Método</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600">
+                    {sale.payment_method || "—"}
+                  </p>
+                </div>
+                <p className="font-mono text-lg font-semibold tabular-nums text-slate-900">
+                  ${Number(sale.total_amount).toLocaleString()}
+                </p>
+              </div>
+              {sale.status === "PENDIENTE" && (
+                <Link
+                  href={`/sales/${sale.id}/complete`}
+                  className="inline-flex w-full items-center justify-center rounded-xl border border-brand-600 bg-brand-50 py-2.5 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-800 hover:bg-brand-100"
+                >
+                  Completar pedido
+                </Link>
+              )}
+            </div>
+          ))}
+          {sales.length === 0 && (
+            <p className="px-6 py-10 text-center text-sm font-medium text-slate-400">
+              No hay ventas ni pedidos registrados.
+            </p>
+          )}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-100">
             <thead className="bg-slate-50">
               <tr>
@@ -64,7 +119,7 @@ export default async function SalesPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y.divide-slate-100 bg-white">
+            <tbody className="divide-y divide-slate-100 bg-white">
               {sales.map((sale: any) => (
                 <tr key={sale.id} className="hover:bg-slate-50 transition-colors">
                   <td className="whitespace-nowrap px-5 py-3 text-[11px] font-mono font-semibold text-slate-500">
@@ -82,15 +137,15 @@ export default async function SalesPage() {
                         sale.status === "COMPLETADO"
                           ? "bg-emerald-100 text-emerald-800"
                           : sale.status === "PENDIENTE"
-                          ? "bg-orange-100 text-orange-800"
-                          : "bg-red-100 text-red-800"
+                            ? "bg-orange-100 text-orange-800"
+                            : "bg-red-100 text-red-800"
                       }`}
                     >
                       {sale.status === "COMPLETADO"
                         ? "Completado"
                         : sale.status === "PENDIENTE"
-                        ? "Pendiente"
-                        : "Cancelado"}
+                          ? "Pendiente"
+                          : "Cancelado"}
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
@@ -113,10 +168,7 @@ export default async function SalesPage() {
               ))}
               {sales.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-6 py-10 text-center.text-sm font-medium text-slate-400"
-                  >
+                  <td colSpan={7} className="px-6 py-10 text-center text-sm font-medium text-slate-400">
                     No hay ventas ni pedidos registrados.
                   </td>
                 </tr>

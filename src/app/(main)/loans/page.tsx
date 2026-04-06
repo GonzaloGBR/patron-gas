@@ -32,7 +32,44 @@ export default async function LoansPage() {
               <h2 className="text-lg font-bold text-slate-800">Deudores Actuales</h2>
             </div>
             
-            <div className="overflow-x-auto">
+            <div className="md:hidden divide-y divide-slate-100">
+              {loans.map((loan: any) => (
+                <div key={loan.id} className="space-y-3 px-4 py-4">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-800">
+                      {loan.client.first_name} {loan.client.last_name}
+                    </p>
+                    <p className="mt-0.5 text-xs font-medium text-slate-600">
+                      {loan.product.brand} {loan.product.weight}kg
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    {loan.quantity_owed > 0 ? (
+                      <span className="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">
+                        DEBE {loan.quantity_owed}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+                        A FAVOR {Math.abs(loan.quantity_owed)}
+                      </span>
+                    )}
+                    <span className="text-xs font-medium text-slate-500">
+                      {format(new Date(loan.updated_at), "dd MMM yy", { locale: es })}
+                    </span>
+                  </div>
+                  <div className="flex justify-end border-t border-slate-100 pt-3">
+                    <ResolveLoanButton loanId={loan.id} quantity={loan.quantity_owed} />
+                  </div>
+                </div>
+              ))}
+              {loans.length === 0 && (
+                <p className="px-6 py-12 text-center text-slate-500">
+                  No hay clientes que deban envases actualmente.
+                </p>
+              )}
+            </div>
+
+            <div className="hidden md:block overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-100">
                 <thead className="bg-slate-50/50">
                   <tr>
